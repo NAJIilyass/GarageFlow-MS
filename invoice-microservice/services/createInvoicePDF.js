@@ -2,6 +2,7 @@ const fs = require("fs");
 const PDFDocument = require("pdfkit");
 const path = require("path");
 
+// Main method
 createInvoicePDF = (invoice) => {
     let doc = new PDFDocument({ size: "A4", margin: 50 });
     const filePath = path.join(
@@ -20,6 +21,7 @@ createInvoicePDF = (invoice) => {
     return filePath;
 };
 
+// Helpers
 generateHeader = (doc) => {
     doc.image("./assets/logo.png", 50, 45, { width: 50 })
         .fillColor("#444444")
@@ -161,7 +163,7 @@ generateHr = (doc, y) => {
         .stroke();
 };
 
-const formatCurrency = (value) => {
+formatCurrency = (value) => {
     const formatter = new Intl.NumberFormat("en-US", {
         style: "decimal",
         minimumFractionDigits: 2,

@@ -5,6 +5,6 @@ const {
 
 const router = express.Router();
 
-router.post("/notify", processNotification); // For manual trigger of notifications
+router.post("/notify", processNotification);
 
 module.exports = router;
