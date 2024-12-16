@@ -8,11 +8,11 @@ const { createInvoicePDF } = require("./createInvoicePDF");
 const InvoiceRepository = require("../repositories/invoiceRepository");
 
 class InvoiceService {
-    static invoice_number = 1001;
     constructor() {
         this.invoiceRepository = new InvoiceRepository();
         this.channel = null;
         this.connectRabbitMQ();
+        this.invoice_number = 1001;
     }
 
     // RabbitMQ connection setup
@@ -46,66 +46,12 @@ class InvoiceService {
             throw new Error("Failed to fetch vehicle or client information");
         }
     }
-    /*
-    // Create PDF Invoice
-    generatePDF(invoiceDetails) {
-        const { clientData, vehicleData, amount, description } = invoiceDetails;
 
-        const doc = new PDFDocument();
-        const filePath = path.join(
-            __dirname,
-            "invoices",
-            `${clientData.first_name}_${clientData.last_name}_invoice.pdf`
-        );
-
-        doc.pipe(fs.createWriteStream(filePath));
-
-        doc.fontSize(16)
-            .text(
-                `Invoice for ${clientData.first_name} ${clientData.last_name}`,
-                { align: "center" }
-            )
-            .moveDown();
-
-        doc.fontSize(12).text(
-            `Invoice Number: ${InvoiceService.invoiceNumber++}`,
-            {
-                align: "left",
-            }
-        );
-        doc.text(`Date of Issue: ${new Date().toLocaleDateString()}`, {
-            align: "left",
-        });
-        doc.text(`Client Information:`, { align: "left" });
-        doc.text(`First Name: ${clientData.first_name}`, { align: "left" });
-        doc.text(`Last Name: ${clientData.last_name}`, { align: "left" });
-        doc.text(`Address: ${clientData.address}`, { align: "left" });
-
-        doc.text(`\nVehicle Information:`, { align: "left" });
-        doc.text(`VIN: ${vehicleData.vin}`, { align: "left" });
-        doc.text(`Registration Number: ${vehicleData.registration_number}`, {
-            align: "left",
-        });
-        doc.text(`Brand: ${vehicleData.brand}`, { align: "left" });
-        doc.text(`Model: ${vehicleData.model}`, { align: "left" });
-        doc.text(`Color: ${vehicleData.color}`, { align: "left" });
-
-        doc.text(`\nMaintenance Details:`, { align: "left" });
-        doc.text(`Date of Maintenance: ${new Date().toLocaleDateString()}`, {
-            align: "left",
-        });
-        doc.text(`Description of Services Provided: ${description}`, {
-            align: "left",
-        });
-
-        doc.text(`\nTotal Amount Due:`, { align: "left" });
-        doc.text(`Amount: ${amount}`, { align: "left" });
-
-        doc.end();
-
-        return filePath; // Return path to the generated PDF
+    async getInvoiceNumber() {
+        const documentLength =
+            await this.invoiceRepository.getNumberOfInvoices();
+        return this.invoice_number + documentLength;
     }
-    */
 
     // Publish notification message to RabbitMQ
     publishNotification(channel, clientData, vehicleData, pdfPath) {
@@ -117,8 +63,6 @@ class InvoiceService {
                 attachment: pdfPath,
                 filename: `${clientData.first_name}_${clientData.last_name}_Invoice.pdf`,
             };
-
-            console.log("message: ", message);
 
             channel.sendToQueue(
                 "NOTIFICATIONS",
@@ -140,8 +84,9 @@ class InvoiceService {
 
         if (isNaN(amount) || amount <= 0) throw new Error("Invalid amount");
 
+        let current_invoice_number = await this.getInvoiceNumber();
         const createdInvoice = await this.invoiceRepository.createInvoice({
-            invoice_number: InvoiceService.invoice_number,
+            invoice_number: current_invoice_number,
             clientId,
             vehicleId,
             amount,
@@ -155,7 +100,7 @@ class InvoiceService {
 
         // Generate the PDF
         const pdfPath = createInvoicePDF({
-            invoice_number: InvoiceService.invoice_number++,
+            invoice_number: current_invoice_number,
             amount,
             client_first_name: clientData.first_name,
             client_last_name: clientData.last_name,

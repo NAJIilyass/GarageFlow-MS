@@ -39,7 +39,7 @@ class MaintenanceTaskRepository {
             const response = await MaintenanceTask.findByIdAndUpdate(
                 taskId,
                 { status },
-                { new: true }
+                { new: false }
             );
 
             return response;

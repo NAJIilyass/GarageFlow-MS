@@ -20,6 +20,16 @@ class InvoiceRepository {
             throw err;
         }
     };
+
+    getNumberOfInvoices = async () => {
+        try {
+            const count = await Invoice.countDocuments();
+            return count;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    };
 }
 
 module.exports = InvoiceRepository;

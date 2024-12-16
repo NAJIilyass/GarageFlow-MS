@@ -278,27 +278,29 @@ class MaintenanceTaskService {
             throw new Error("Invalid maintenance status");
         }
 
-        const updatedTask = await this.maintenanceTaskRepository.updateStatus(
+        const previousTask = await this.maintenanceTaskRepository.updateStatus(
             taskId,
             status
         );
 
-        if (!updatedTask) throw new Error("Maintenance task not found");
+        if (!previousTask) throw new Error("Maintenance task not found");
 
-        if (status === MaintenanceStatus.COMPLETED) {
-            const maintenanceTask = await this.getMaintenanceTaskById(taskId);
+        if (
+            status === MaintenanceStatus.COMPLETED &&
+            previousTask.status !== MaintenanceStatus.COMPLETED
+        ) {
             await this.updateVehicleStatus(
-                maintenanceTask.vehicle_id,
+                previousTask.vehicle_id,
                 "MAINTAINED"
             );
             await this.sendInvoice(
-                maintenanceTask.client_id,
-                maintenanceTask.vehicle_id,
-                maintenanceTask.total_amount,
-                maintenanceTask.description
+                previousTask.client_id,
+                previousTask.vehicle_id,
+                previousTask.total_amount,
+                previousTask.description
             );
         }
-        return updatedTask;
+        return previousTask;
     };
 }
 

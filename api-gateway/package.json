@@ -1,5 +1,5 @@
 {
-    "name": "notification-microservice",
+    "name": "api-gateway",
     "version": "1.0.0",
     "description": "",
     "main": "app.js",
@@ -11,11 +11,10 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "amqplib": "^0.10.5",
-        "axios": "^1.7.9",
+        "cors": "^2.8.5",
         "dotenv": "^16.4.7",
         "express": "^4.21.2",
-        "nodemailer": "^6.9.16",
+        "http-proxy-middleware": "^3.0.3",
         "nodemon": "^3.1.9"
     }
 }
