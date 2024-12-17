@@ -3,7 +3,7 @@ const Vehicle = require("../Models/vehicleModel");
 class VehicleRepository {
     getAllVehicles = async () => {
         try {
-            const response = await Vehicle.find({}).sort({ createdAt: -1 });
+            const response = await Vehicle.find({}).sort({ status: 1 });
             return response;
         } catch (err) {
             console.error(err);
@@ -13,7 +13,9 @@ class VehicleRepository {
 
     getVehicleById = async (vehicleId) => {
         try {
-            const response = await Vehicle.findById(vehicleId);
+            const response = await Vehicle.findById(vehicleId).sort({
+                status: 1,
+            });
             return response;
         } catch (err) {
             console.error(err);
@@ -23,7 +25,9 @@ class VehicleRepository {
 
     getVehiclesByOwnerId = async (owner_id) => {
         try {
-            const response = await Vehicle.find({ owner_id });
+            const response = await Vehicle.find({ owner_id }).sort({
+                status: 1,
+            });
             return response;
         } catch (err) {
             console.error(err);

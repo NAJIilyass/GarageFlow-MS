@@ -172,26 +172,21 @@ class MaintenanceTaskService {
         end_time,
         total_amount,
         status,
-        vehicle_id,
-        client_id
+        vehicle_id
     ) => {
         if (
             !description ||
             !start_time ||
             !end_time ||
             !total_amount ||
-            !vehicle_id ||
-            !client_id
+            !vehicle_id
         ) {
             throw new Error(
                 "description, start_time, end_time, total_amount, vehicle_id and client_id are all required"
             );
         }
 
-        if (
-            !mongoose.Types.ObjectId.isValid(vehicle_id) ||
-            !mongoose.Types.ObjectId.isValid(client_id)
-        )
+        if (!mongoose.Types.ObjectId.isValid(vehicle_id))
             throw new Error("vehicle_id and client_id must be valid IDs");
 
         if (total_amount <= 0 || typeof total_amount !== "number") {
@@ -215,6 +210,9 @@ class MaintenanceTaskService {
             throw new Error(`Invalid maintenance task status`);
         }
 
+        // Get vehicle information
+        const vehicleData = await this.getVehicleInfo(vehicle_id);
+
         // Save the maintenance task in the database
         const createdTask =
             await this.maintenanceTaskRepository.createMaintenanceTask({
@@ -225,12 +223,11 @@ class MaintenanceTaskService {
                 total_amount,
                 status,
                 vehicle_id,
-                client_id,
+                client_id: vehicleData.owner_id,
             });
 
-        // Get vehicle and client information
-        const vehicleData = await this.getVehicleInfo(vehicle_id);
-        const clientData = await this.getClientInfo(client_id);
+        // Get client information
+        const clientData = await this.getClientInfo(vehicleData.owner_id);
 
         await this.updateVehicleStatus(vehicle_id, "SCHEDULED");
 

@@ -171,7 +171,7 @@ formatCurrency = (value) => {
     });
 
     const formattedValue = formatter.format(value);
-    return `${formattedValue.replace(/,/g, " ")} MAD`; // Replace commas with spaces
+    return `${formattedValue.replace(/,/g, " ")} MAD`;
 };
 
 formatDate = (date) => {

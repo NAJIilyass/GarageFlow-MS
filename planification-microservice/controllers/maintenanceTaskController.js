@@ -10,7 +10,6 @@ createMaintenanceTask = async (req, res) => {
         total_amount,
         status,
         vehicle_id,
-        client_id,
     } = req.body;
 
     try {
@@ -20,8 +19,7 @@ createMaintenanceTask = async (req, res) => {
             end_time,
             total_amount,
             status,
-            vehicle_id,
-            client_id
+            vehicle_id
         );
 
         res.status(201).json(response);
@@ -57,6 +55,7 @@ updateStatus = async (req, res) => {
     const { taskId } = req.params;
     const { status } = req.body;
 
+    console.log(status);
     try {
         const response = await maintenanceTaskService.updateStatus(
             taskId,
