@@ -63,6 +63,7 @@ const TaskDetails = ({ task }) => {
         let newStatus = task.status === "PLANNED" ? "IN_PROGRESS" : "COMPLETED";
         try {
             await planificationService.updateStatus(task._id, newStatus);
+            window.location.reload();
         } catch (err) {
             console.error(err);
         }

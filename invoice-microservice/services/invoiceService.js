@@ -3,6 +3,8 @@ const axios = require("axios");
 const { createInvoicePDF } = require("./createInvoicePDF");
 const InvoiceRepository = require("../repositories/invoiceRepository");
 const amqp = require("amqplib");
+const path = require("path");
+const fs = require("fs");
 
 class InvoiceService {
     constructor() {
@@ -23,6 +25,16 @@ class InvoiceService {
             console.error("Failed to connect to RabbitMQ:", error.message);
         }
     }
+
+    deleteInvoiceAlreadyCreated = (filePath) => {
+        fs.unlink(filePath, (err) => {
+            if (err)
+                console.error(
+                    `Failed to delete file at ${filePath}:`,
+                    err.message
+                );
+        });
+    };
 
     async getVehicleAndClientInfo(vehicleId) {
         try {
@@ -104,6 +116,18 @@ class InvoiceService {
             vehicleData,
             pdfPath
         );
+
+        // Delete the created PDF
+        const filePath = path.join(
+            __dirname,
+            "invoices",
+            `${clientData.first_name}_${clientData.last_name}_invoice.pdf`
+        );
+
+        setTimeout(() => {
+            this.deleteInvoiceAlreadyCreated(filePath);
+        }, 2000);
+
         return createdInvoice;
     }
 

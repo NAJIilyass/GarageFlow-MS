@@ -52,7 +52,7 @@ const ClientVehiclesList = () => {
                 )}
             </div>
 
-            {!vehicles && (
+            {(!vehicles || vehicles.length === 0) && (
                 <div className="my-16">
                     <NoElementFound target={"vehicle"} />
                 </div>
