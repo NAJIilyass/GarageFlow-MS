@@ -120,13 +120,12 @@ class InvoiceService {
         // Delete the created PDF
         const filePath = path.join(
             __dirname,
-            "invoices",
             `${clientData.first_name}_${clientData.last_name}_invoice.pdf`
         );
 
         setTimeout(() => {
             this.deleteInvoiceAlreadyCreated(filePath);
-        }, 2000);
+        }, 1500);
 
         return createdInvoice;
     }

@@ -7,7 +7,6 @@ createInvoicePDF = (invoice) => {
     let doc = new PDFDocument({ size: "A4", margin: 50 });
     const filePath = path.join(
         __dirname,
-        "invoices",
         `${invoice.client_first_name}_${invoice.client_last_name}_invoice.pdf`
     );
 
