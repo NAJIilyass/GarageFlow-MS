@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import ClientService from "../services/ClientService";
 import VehicleService from "../services/VehicleService";
 import PlanificationService from "../services/PlanificationService";
+import { useNavigate } from "react-router-dom";
 
 const TaskDetails = ({ task }) => {
     const clientService = new ClientService();
     const vehicleService = new VehicleService();
     const planificationService = new PlanificationService();
+
+    const navigate = useNavigate();
 
     const [client, setClient] = useState(null);
     const [vehicle, setVehicle] = useState(null);
@@ -65,6 +68,10 @@ const TaskDetails = ({ task }) => {
         }
     };
 
+    const handleDisplayClientClick = () => {
+        navigate(`/clients/#${task.client_id}`);
+    };
+
     return (
         <div className="bg-[#F3F4F6] text-center mx-[30%] py-6 my-10 rounded-2xl shadow-md shadow-[#c1c1c1] text-lg">
             {task && client && vehicle && (
@@ -100,7 +107,10 @@ const TaskDetails = ({ task }) => {
                         </p>
                     </div>
                     <div className="font-normal flex justify-end mr-4 gap-4 mt-2 mb-1.5 text-base">
-                        <button className="bg-white rounded-2xl py-2 px-7">
+                        <button
+                            onClick={handleDisplayClientClick}
+                            className="bg-white rounded-2xl py-2 px-7"
+                        >
                             Display client
                         </button>
                         {task.status !== "COMPLETED" && (

@@ -32,8 +32,7 @@ class VehicleService {
             owner_id
         );
 
-        if (!vehicles || vehicles.length === 0)
-            throw new Error("No vehicles found for this owner");
+        if (!vehicles) throw new Error("No vehicles found for this owner");
 
         return vehicles;
     };
@@ -61,11 +60,12 @@ class VehicleService {
             !mileage ||
             !fuel_type ||
             !purchase_date ||
-            !status ||
             !owner_id
         )
             throw new Error("All fields are required");
 
+        year = Number(year);
+        mileage = Number(mileage);
         purchase_date = new Date(purchase_date);
 
         if (!mongoose.Types.ObjectId.isValid(owner_id))
@@ -74,7 +74,7 @@ class VehicleService {
         if (!Object.values(FuelTypes).includes(fuel_type))
             throw new Error("Invalid fuel type");
 
-        if (!Object.values(VehicleStatus).includes(status))
+        if (status && !Object.values(VehicleStatus).includes(status))
             throw new Error("Invalid vehicle status");
 
         if (

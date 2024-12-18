@@ -23,6 +23,17 @@ const ClientsList = () => {
         fetchClients();
     }, []);
 
+    useEffect(() => {
+        const hash = window.location.hash;
+        if (hash) {
+            const targetId = hash.substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }, [clients]);
+
     return (
         <div>
             <div className="mb-8 text-center flex flex-col gap-5">
@@ -36,7 +47,7 @@ const ClientsList = () => {
             )}
             {clients &&
                 clients.map((client) => (
-                    <div key={client._id}>
+                    <div id={client._id} key={client._id}>
                         <ClientDetails client={client} />
                     </div>
                 ))}

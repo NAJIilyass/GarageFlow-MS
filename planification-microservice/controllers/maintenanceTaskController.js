@@ -54,8 +54,6 @@ getWorkPlan = async (req, res) => {
 updateStatus = async (req, res) => {
     const { taskId } = req.params;
     const { status } = req.body;
-
-    console.log(status);
     try {
         const response = await maintenanceTaskService.updateStatus(
             taskId,

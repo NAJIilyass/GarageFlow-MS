@@ -46,6 +46,7 @@ const vehicleSchema = new Schema(
         status: {
             type: String,
             enum: Object.values(VehicleStatus),
+            default: VehicleStatus.NOT_YET_SCHEDULED,
         },
         owner_id: {
             type: mongoose.Schema.Types.ObjectId,

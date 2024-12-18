@@ -55,7 +55,7 @@ class InvoiceService {
         const message = {
             email: clientData.email,
             subject: `Invoice for Services Rendered - ${clientData.last_name} ${clientData.first_name} - ${vehicleData.brand} ${vehicleData.model}`,
-            text: `Dear ${clientData.first_name},\nPlease find attached the invoice for the services rendered.`,
+            text: `Dear ${clientData.first_name} ${clientData.last_name},\n\nWe are pleased to inform you that your ${vehicleData.brand} ${vehicleData.model} has been successfully serviced. Please find attached your detailed invoice for the repair services rendered.\n\nShould you have any questions, feel free to contact us.\n\nThank you for choosing our services!\n\nBest regards,\nThe Garage Team`,
             attachment: pdfPath,
             filename: `${clientData.first_name}_${clientData.last_name}_Invoice.pdf`,
         };

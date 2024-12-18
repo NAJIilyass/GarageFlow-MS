@@ -60,6 +60,7 @@ const VehicleDetails = ({ vehicle }) => {
 
             try {
                 await vehicleService.updateVehicle(vehicle._id, updatedVehicle);
+                setIsModifying(false);
                 navigate(`/clients/${vehicle.owner_id}/vehicles`);
             } catch (err) {
                 console.error(err);

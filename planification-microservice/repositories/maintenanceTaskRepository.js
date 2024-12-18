@@ -14,6 +14,7 @@ class MaintenanceTaskRepository {
     getWorkPlan = async (day) => {
         try {
             const response = await MaintenanceTask.find({ day }).sort({
+                status: -1,
                 start_time: 1,
             });
 
