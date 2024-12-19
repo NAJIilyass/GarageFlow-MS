@@ -18,8 +18,12 @@ spec:
             containers:
                 - name: planification-microservice
                   image: garage-workflow-planification-microservice:latest
+                  imagePullPolicy: Never
                   ports:
                       - containerPort: 5003
+                  env:
+                      - name: RABBITMQ_URL
+                        value: amqp://rabbitmq
 ---
 apiVersion: v1
 kind: Service

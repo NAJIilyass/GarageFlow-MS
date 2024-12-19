@@ -18,6 +18,7 @@ spec:
             containers:
                 - name: vehicle-microservice
                   image: garage-workflow-vehicle-microservice:latest
+                  imagePullPolicy: Never
                   ports:
                       - containerPort: 5002
 ---

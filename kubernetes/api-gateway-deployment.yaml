@@ -4,35 +4,28 @@ metadata:
     name: api-gateway
     namespace: garage-workflow
 spec:
-    replicas: 2
+    replicas: 1
     selector:
         matchLabels:
             app: api-gateway
-            version: v1
     template:
         metadata:
             labels:
                 app: api-gateway
-                version: v1
         spec:
             containers:
                 - name: api-gateway
                   image: garage-workflow-api-gateway:latest
+                  imagePullPolicy: Never
                   ports:
                       - containerPort: 4000
                   env:
                       - name: CLIENT_API_URL
-                        value: "http://client-microservice:5001"
+                        value: http://client-microservice:5001
                       - name: VEHICLE_API_URL
-                        value: "http://vehicle-microservice:5002"
+                        value: http://vehicle-microservice:5002
                       - name: MAINTENANCE_TASKS_API_URL
-                        value: "http://planification-microservice:5003"
-                  readinessProbe:
-                      httpGet:
-                          path: /health
-                          port: 4000
-                      initialDelaySeconds: 5
-                      periodSeconds: 5
+                        value: http://planification-microservice:5003
 ---
 apiVersion: v1
 kind: Service
@@ -44,6 +37,6 @@ spec:
         app: api-gateway
     ports:
         - protocol: TCP
-          port: 80
+          port: 4000
           targetPort: 4000
-    type: ClusterIP
+    type: LoadBalancer

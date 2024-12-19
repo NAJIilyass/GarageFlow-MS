@@ -18,8 +18,16 @@ spec:
             containers:
                 - name: notification-microservice
                   image: garage-workflow-notification-microservice:latest
+                  imagePullPolicy: Never
                   ports:
-                      - containerPort: 5672
+                      - containerPort: 5005
+                  env:
+                      - name: RABBITMQ_URL
+                        value: amqp://rabbitmq
+                      - name: EMAIL
+                        value: "najiiilyassoo@gmail.com"
+                      - name: PASSWORD
+                        value: "wedy hran twaw fwal"
 ---
 apiVersion: v1
 kind: Service
@@ -31,6 +39,6 @@ spec:
         app: notification-microservice
     ports:
         - protocol: TCP
-          port: 5672
-          targetPort: 5672
+          port: 5005
+          targetPort: 5005
     type: ClusterIP

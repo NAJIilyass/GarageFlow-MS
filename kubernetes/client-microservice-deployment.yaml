@@ -18,6 +18,7 @@ spec:
             containers:
                 - name: client-microservice
                   image: garage-workflow-client-microservice:latest
+                  imagePullPolicy: Never
                   ports:
                       - containerPort: 5001
 ---

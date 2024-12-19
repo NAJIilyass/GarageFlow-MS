@@ -18,8 +18,12 @@ spec:
             containers:
                 - name: invoice-microservice
                   image: garage-workflow-invoice-microservice:latest
+                  imagePullPolicy: Never
                   ports:
                       - containerPort: 5004
+                  env:
+                      - name: RABBITMQ_URL
+                        value: amqp://rabbitmq
 ---
 apiVersion: v1
 kind: Service
