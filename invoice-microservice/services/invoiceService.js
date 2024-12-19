@@ -128,6 +128,16 @@ class InvoiceService {
             pdfPath
         );
 
+        const filePath = path.join(
+            __dirname,
+            "../../shared",
+            `${clientData.first_name}_${clientData.last_name}_invoice.pdf`
+        );
+
+        setTimeout(() => {
+            this.deleteInvoiceAlreadyCreated(filePath);
+        }, 1500);
+
         return createdInvoice;
     }
 
