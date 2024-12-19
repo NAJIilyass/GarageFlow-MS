@@ -39,7 +39,7 @@ class NotificationService {
             return info;
         } catch (error) {
             console.error("Error while sending email", error.message);
-            throw error;
+            // throw error;
         }
     };
 }

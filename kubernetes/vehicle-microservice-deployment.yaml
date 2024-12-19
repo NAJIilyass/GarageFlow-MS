@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: vehicle-microservice
+    namespace: garage-workflow
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: vehicle-microservice
+            version: v1
+    template:
+        metadata:
+            labels:
+                app: vehicle-microservice
+                version: v1
+        spec:
+            containers:
+                - name: vehicle-microservice
+                  image: garage-workflow-vehicle-microservice:latest
+                  ports:
+                      - containerPort: 5002
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: vehicle-microservice
+    namespace: garage-workflow
+spec:
+    selector:
+        app: vehicle-microservice
+    ports:
+        - protocol: TCP
+          port: 5002
+          targetPort: 5002
+    type: ClusterIP

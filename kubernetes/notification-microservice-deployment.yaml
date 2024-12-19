@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: notification-microservice
+    namespace: garage-workflow
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: notification-microservice
+            version: v1
+    template:
+        metadata:
+            labels:
+                app: notification-microservice
+                version: v1
+        spec:
+            containers:
+                - name: notification-microservice
+                  image: garage-workflow-notification-microservice:latest
+                  ports:
+                      - containerPort: 5672
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: notification-microservice
+    namespace: garage-workflow
+spec:
+    selector:
+        app: notification-microservice
+    ports:
+        - protocol: TCP
+          port: 5672
+          targetPort: 5672
+    type: ClusterIP

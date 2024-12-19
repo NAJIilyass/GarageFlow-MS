@@ -39,11 +39,11 @@ class InvoiceService {
     async getVehicleAndClientInfo(vehicleId) {
         try {
             const vehicleResponse = await axios.get(
-                `http://localhost:5002/${vehicleId}`
+                `http://vehicle-microservice:5002/${vehicleId}`
             );
             const vehicleData = vehicleResponse.data;
             const clientResponse = await axios.get(
-                `http://localhost:5001/${vehicleData.owner_id}`
+                `http://client-microservice:5001/${vehicleData.owner_id}`
             );
             return { vehicleData, clientData: clientResponse.data };
         } catch (error) {

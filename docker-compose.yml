@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - CLIENT_API_URL=http://client-microservice:5001
+      - VEHICLE_API_URL=http://vehicle-microservice:5002
+      - MAINTENANCE_TASKS_API_URL=http://planification-microservice:5003
+      - INVOICE_API_URL=http://invoice-microservice:5004
+    depends_on:
+      - client-microservice
+      - vehicle-microservice
+      - planification-microservice
+      - invoice-microservice
+
+  client-microservice:
+    build:
+      context: ./client-microservice
+    ports:
+      - "5001:5001"
+
+  vehicle-microservice:
+    build:
+      context: ./vehicle-microservice
+    ports:
+      - "5002:5002"
+
+  planification-microservice:
+    build:
+      context: ./planification-microservice
+    ports:
+      - "5003:5003"
+
+  notification-microservice:
+    build:
+      context: ./notification-microservice
+    ports:
+      - "5672:5672"
+
+  invoice-microservice:
+    build:
+      context: ./invoice-microservice
+    ports:
+      - "5004:5004"
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-gateway

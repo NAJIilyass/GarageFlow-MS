@@ -80,7 +80,7 @@ class MaintenanceTaskService {
     async getVehicleInfo(vehicle_id) {
         try {
             const vehicleResponse = await axios.get(
-                `http://localhost:5002/${vehicle_id}`
+                `http://vehicle-microservice:5002/${vehicle_id}`
             );
             const vehicleData = vehicleResponse.data;
 
@@ -94,7 +94,7 @@ class MaintenanceTaskService {
     async getClientInfo(client_id) {
         try {
             const clientResponse = await axios.get(
-                `http://localhost:5001/${client_id}`
+                `http://client-microservice:5001/${client_id}`
             );
             const clientData = clientResponse.data;
 
@@ -108,7 +108,7 @@ class MaintenanceTaskService {
     async updateVehicleStatus(vehicle_id, newStatus) {
         try {
             const vehicleResponse = await axios.patch(
-                `http://localhost:5002/${vehicle_id}/status`,
+                `http://vehicle-microservice:5002/${vehicle_id}/status`,
                 { newStatus }
             );
             const vehicleData = vehicleResponse.data;
@@ -152,12 +152,15 @@ class MaintenanceTaskService {
     // Create and send invoice
     async sendInvoice(clientId, vehicleId, amount, description) {
         try {
-            const invoiceResponse = await axios.post(`http://localhost:5004/`, {
-                clientId,
-                vehicleId,
-                amount,
-                description,
-            });
+            const invoiceResponse = await axios.post(
+                `http://invoice-microservice:5004/`,
+                {
+                    clientId,
+                    vehicleId,
+                    amount,
+                    description,
+                }
+            );
             const invoiceData = invoiceResponse.data;
 
             return invoiceData;

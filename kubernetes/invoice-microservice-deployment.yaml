@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: invoice-microservice
+    namespace: garage-workflow
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: invoice-microservice
+            version: v1
+    template:
+        metadata:
+            labels:
+                app: invoice-microservice
+                version: v1
+        spec:
+            containers:
+                - name: invoice-microservice
+                  image: garage-workflow-invoice-microservice:latest
+                  ports:
+                      - containerPort: 5004
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: invoice-microservice
+    namespace: garage-workflow
+spec:
+    selector:
+        app: invoice-microservice
+    ports:
+        - protocol: TCP
+          port: 5004
+          targetPort: 5004
+    type: ClusterIP
