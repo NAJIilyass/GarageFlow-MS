@@ -14,15 +14,25 @@ class InvoiceService {
         this.connectRabbitMQ();
     }
 
-    async connectRabbitMQ() {
-        try {
-            const amqpServer = process.env.RABBITMQ_URL;
-            const connection = await amqp.connect(amqpServer);
-            this.channel = await connection.createChannel();
-            await this.channel.assertQueue("NOTIFICATIONS");
-            console.log("RabbitMQ connected and queue asserted");
-        } catch (error) {
-            console.error("Failed to connect to RabbitMQ:", error.message);
+    async connectRabbitMQ(retries = 5, delay = 10000) {
+        while (retries > 0) {
+            try {
+                const amqpServer = process.env.RABBITMQ_URL;
+                const connection = await amqp.connect(amqpServer);
+                this.channel = await connection.createChannel();
+                await this.channel.assertQueue("NOTIFICATIONS");
+                console.log("RabbitMQ connected and queue asserted");
+                return; // Exit the loop once connected
+            } catch (error) {
+                console.error("Failed to connect to RabbitMQ:", error.message);
+                retries -= 1;
+                if (retries === 0) {
+                    console.error("All retry attempts failed. Exiting...");
+                    throw new Error("Could not connect to RabbitMQ");
+                }
+                console.log(`Retrying to connect... (${retries} retries left)`);
+                await new Promise((resolve) => setTimeout(resolve, delay)); // Wait before retrying
+            }
         }
     }
 
@@ -99,7 +109,8 @@ class InvoiceService {
         const { vehicleData, clientData } = await this.getVehicleAndClientInfo(
             vehicleId
         );
-        const pdfPath = createInvoicePDF({
+
+        const pdfPath = await createInvoicePDF({
             invoice_number: invoiceNumber,
             amount,
             client_first_name: clientData.first_name,
@@ -116,16 +127,6 @@ class InvoiceService {
             vehicleData,
             pdfPath
         );
-
-        // Delete the created PDF
-        const filePath = path.join(
-            __dirname,
-            `${clientData.first_name}_${clientData.last_name}_invoice.pdf`
-        );
-
-        setTimeout(() => {
-            this.deleteInvoiceAlreadyCreated(filePath);
-        }, 1500);
 
         return createdInvoice;
     }

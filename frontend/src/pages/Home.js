@@ -41,7 +41,7 @@ const Home = () => {
                 <p className="text-lg">Today: {formattedDate}</p>
             </div>
 
-            {!tasks && (
+            {(!tasks || tasks.length === 0) && (
                 <div className="my-16">
                     <NoElementFound target={"task"} />
                 </div>

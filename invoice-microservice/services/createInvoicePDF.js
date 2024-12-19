@@ -4,20 +4,35 @@ const path = require("path");
 
 // Main method
 createInvoicePDF = (invoice) => {
-    let doc = new PDFDocument({ size: "A4", margin: 50 });
-    const filePath = path.join(
-        __dirname,
-        `${invoice.client_first_name}_${invoice.client_last_name}_invoice.pdf`
-    );
+    return new Promise((resolve, reject) => {
+        const doc = new PDFDocument({ size: "A4", margin: 50 });
+        const directoryPath = path.join(__dirname, "../../shared");
 
-    generateHeader(doc);
-    generateCustomerInformation(doc, invoice);
-    generateInvoiceTable(doc, invoice);
-    generateFooter(doc);
+        // Ensure the directory exists
+        if (!fs.existsSync(directoryPath)) {
+            fs.mkdirSync(directoryPath, { recursive: true });
+        }
 
-    doc.end();
-    doc.pipe(fs.createWriteStream(filePath));
-    return filePath;
+        const filePath = path.join(
+            directoryPath,
+            `${invoice.client_first_name}_${invoice.client_last_name}_invoice.pdf`
+        );
+
+        const writeStream = fs.createWriteStream(filePath);
+        doc.pipe(writeStream);
+
+        // Generate the PDF content
+        generateHeader(doc);
+        generateCustomerInformation(doc, invoice);
+        generateInvoiceTable(doc, invoice);
+        generateFooter(doc);
+
+        doc.end();
+
+        // Wait for the file to finish writing
+        writeStream.on("finish", () => resolve(filePath));
+        writeStream.on("error", (err) => reject(err));
+    });
 };
 
 // Helpers

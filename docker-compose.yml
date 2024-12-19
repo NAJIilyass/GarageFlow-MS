@@ -35,18 +35,34 @@ services:
       context: ./planification-microservice
     ports:
       - "5003:5003"
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      - rabbitmq
 
   notification-microservice:
     build:
       context: ./notification-microservice
+    volumes:
+      - shared-data:/app/shared
     ports:
-      - "5672:5672"
+      - "5005:5005"  # Changed to avoid conflict
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      - rabbitmq
 
   invoice-microservice:
     build:
       context: ./invoice-microservice
+    volumes:
+      - shared-data:/app/shared
     ports:
       - "5004:5004"
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      - rabbitmq
 
   frontend:
     build:
@@ -55,3 +71,15 @@ services:
       - "3000:3000"
     depends_on:
       - api-gateway
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"  # AMQP port for RabbitMQ
+      - "15672:15672"  # Management UI port
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  shared-data:

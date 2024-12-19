@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const path = require("path");
 
 class NotificationService {
     static sendEmail = async ({
@@ -29,7 +30,11 @@ class NotificationService {
                 mailOptions.attachments = [
                     {
                         filename: filename || "Invoice.pdf",
-                        path: attachment,
+                        path: path.join(
+                            __dirname,
+                            "../../shared",
+                            path.basename(attachment)
+                        ),
                     },
                 ];
             }

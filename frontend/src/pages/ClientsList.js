@@ -40,7 +40,7 @@ const ClientsList = () => {
                 <p className="text-3xl font-semibold">Clients List</p>
             </div>
 
-            {!clients && (
+            {(!clients || clients.length === 0) && (
                 <div className="my-16">
                     <NoElementFound target={"client"} />
                 </div>

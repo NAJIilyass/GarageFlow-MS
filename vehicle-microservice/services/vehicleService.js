@@ -125,23 +125,24 @@ class VehicleService {
             delete updatedVehicle.createdAt;
         }
 
-        if (
-            updatedVehicle.year &&
-            (typeof updatedVehicle.year !== "number" ||
+        if (updatedVehicle.year) {
+            updatedVehicle.year = Number(updatedVehicle.year);
+            if (
                 updatedVehicle.year < 1886 ||
-                updatedVehicle.year > new Date().getFullYear())
-        )
-            throw new Error(
-                "Invalid year. It must be a number and between 1886 and the current year"
-            );
+                updatedVehicle.year > new Date().getFullYear()
+            )
+                throw new Error(
+                    "Invalid year. It must be a number and between 1886 and the current year"
+                );
+        }
 
-        if (
-            updatedVehicle.mileage &&
-            (typeof updatedVehicle.mileage !== "number" ||
-                updatedVehicle.mileage < 0)
-        )
-            throw new Error("Invalid mileage. It must be a positive number");
-
+        if (updatedVehicle.mileage) {
+            updatedVehicle.mileage = Number(updatedVehicle.mileage);
+            if (updatedVehicle.mileage < 0)
+                throw new Error(
+                    "Invalid mileage. It must be a positive number"
+                );
+        }
         if (
             updatedVehicle.fuel_type &&
             !Object.values(FuelTypes).includes(updatedVehicle.fuel_type)
