@@ -36,9 +36,16 @@ services:
     ports:
       - "5003:5003"
     environment:
+      - PORT=5003
       - RABBITMQ_URL=amqp://rabbitmq
+      - CLIENT_API_URL=http://client-microservice:5001
+      - VEHICLE_API_URL=http://vehicle-microservice:5002
+      - INVOICE_API_URL=http://invoice-microservice:5004
     depends_on:
       - rabbitmq
+      - client-microservice
+      - vehicle-microservice
+      - invoice-microservice
 
   notification-microservice:
     build:
@@ -60,15 +67,22 @@ services:
     ports:
       - "5004:5004"
     environment:
+      - PORT=5004
       - RABBITMQ_URL=amqp://rabbitmq
+      - CLIENT_API_URL=http://client-microservice:5001
+      - VEHICLE_API_URL=http://vehicle-microservice:5002
     depends_on:
       - rabbitmq
+      - client-microservice
+      - vehicle-microservice
 
   frontend:
     build:
       context: ./frontend
     ports:
       - "3000:3000"
+    environment:
+      - REACT_APP_API_GATEWAY_URL=http://localhost:4000
     depends_on:
       - api-gateway
 

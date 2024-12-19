@@ -5,6 +5,7 @@ const InvoiceRepository = require("../repositories/invoiceRepository");
 const amqp = require("amqplib");
 const path = require("path");
 const fs = require("fs");
+require("dotenv").config();
 
 class InvoiceService {
     constructor() {
@@ -49,11 +50,11 @@ class InvoiceService {
     async getVehicleAndClientInfo(vehicleId) {
         try {
             const vehicleResponse = await axios.get(
-                `http://vehicle-microservice:5002/${vehicleId}`
+                `${process.env.VEHICLE_API_URL}/${vehicleId}`
             );
             const vehicleData = vehicleResponse.data;
             const clientResponse = await axios.get(
-                `http://client-microservice:5001/${vehicleData.owner_id}`
+                `${process.env.CLIENT_API_URL}/${vehicleData.owner_id}`
             );
             return { vehicleData, clientData: clientResponse.data };
         } catch (error) {

@@ -2,7 +2,7 @@ import axios from "axios";
 
 class ClientService {
     constructor() {
-        this.gatewayURL = "http://localhost:4000";
+        this.gatewayURL = process.env.REACT_APP_API_GATEWAY_URL;
         this.baseURL = `${this.gatewayURL}/clients`;
     }
 
