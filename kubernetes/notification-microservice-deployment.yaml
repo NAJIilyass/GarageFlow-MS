@@ -28,6 +28,13 @@ spec:
                         value: "najiiilyassoo@gmail.com"
                       - name: PASSWORD
                         value: "wedy hran twaw fwal"
+                  volumeMounts:
+                      - name: shared-data
+                        mountPath: /app/shared
+            volumes:
+                - name: shared-data
+                  persistentVolumeClaim:
+                      claimName: shared-data-pvc
 ---
 apiVersion: v1
 kind: Service
