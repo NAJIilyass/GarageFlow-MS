@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: client-microservice
+    namespace: garage-workflow
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: client-microservice
+            version: v1
+    template:
+        metadata:
+            labels:
+                app: client-microservice
+                version: v1
+        spec:
+            containers:
+                - name: client-microservice
+                  image: garage-workflow-client-microservice:latest
+                  imagePullPolicy: Never
+                  ports:
+                      - containerPort: 5001
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: client-microservice
+    namespace: garage-workflow
+spec:
+    selector:
+        app: client-microservice
+    ports:
+        - protocol: TCP
+          port: 5001
+          targetPort: 5001
+    type: ClusterIP
