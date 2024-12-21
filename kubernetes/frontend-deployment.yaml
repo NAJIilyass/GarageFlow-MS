@@ -4,7 +4,7 @@ metadata:
     name: frontend
     namespace: garage-workflow
 spec:
-    replicas: 2
+    replicas: 1
     selector:
         matchLabels:
             app: frontend
@@ -17,7 +17,7 @@ spec:
         spec:
             containers:
                 - name: frontend
-                  image: garage-workflow-frontend:latest
+                  image: garage-workflow-frontend:v1
                   imagePullPolicy: Never
                   ports:
                       - containerPort: 3000

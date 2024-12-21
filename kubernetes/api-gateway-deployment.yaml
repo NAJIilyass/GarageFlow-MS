@@ -41,5 +41,5 @@ spec:
         - protocol: TCP
           port: 4000
           targetPort: 4000
-          nodePort: 30001 # Use a fixed NodePort
+          nodePort: 30001
     type: NodePort

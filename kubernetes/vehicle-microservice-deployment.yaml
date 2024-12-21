@@ -4,7 +4,7 @@ metadata:
     name: vehicle-microservice
     namespace: garage-workflow
 spec:
-    replicas: 2
+    replicas: 1
     selector:
         matchLabels:
             app: vehicle-microservice
