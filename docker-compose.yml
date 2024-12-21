@@ -53,7 +53,7 @@ services:
     volumes:
       - shared-data:/app/shared
     ports:
-      - "5005:5005"  # Changed to avoid conflict
+      - "5005:5005"
     environment:
       - RABBITMQ_URL=amqp://rabbitmq
     depends_on:
