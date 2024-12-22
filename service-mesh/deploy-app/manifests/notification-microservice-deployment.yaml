@@ -4,7 +4,7 @@ metadata:
     name: notification-microservice
     namespace: garage-workflow
 spec:
-    replicas: 2
+    replicas: 1
     selector:
         matchLabels:
             app: notification-microservice

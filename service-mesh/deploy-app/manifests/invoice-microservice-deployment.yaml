@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: planification-microservice
+    name: invoice-microservice
     namespace: garage-workflow
 spec:
-    replicas: 2
+    replicas: 1
     selector:
         matchLabels:
-            app: planification-microservice
+            app: invoice-microservice
             version: v1
     template:
         metadata:
             labels:
-                app: planification-microservice
+                app: invoice-microservice
                 version: v1
         spec:
             containers:
-                - name: planification-microservice
-                  image: garage-workflow-planification-microservice:latest
+                - name: invoice-microservice
+                  image: garage-workflow-invoice-microservice:latest
                   imagePullPolicy: Never
                   ports:
-                      - containerPort: 5003
+                      - containerPort: 5004
                   env:
                       - name: RABBITMQ_URL
                         value: amqp://rabbitmq
@@ -28,19 +28,24 @@ spec:
                         value: http://client-microservice:5001
                       - name: VEHICLE_API_URL
                         value: http://vehicle-microservice:5002
-                      - name: INVOICE_API_URL
-                        value: http://invoice-microservice:5004
+                  volumeMounts:
+                      - name: shared-data
+                        mountPath: /app/shared
+            volumes:
+                - name: shared-data
+                  persistentVolumeClaim:
+                      claimName: shared-data-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: planification-microservice
+    name: invoice-microservice
     namespace: garage-workflow
 spec:
     selector:
-        app: planification-microservice
+        app: invoice-microservice
     ports:
         - protocol: TCP
-          port: 5003
-          targetPort: 5003
+          port: 5004
+          targetPort: 5004
     type: ClusterIP

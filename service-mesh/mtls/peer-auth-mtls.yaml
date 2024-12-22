@@ -1,0 +1,112 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+    name: default
+    namespace: garage-workflow
+spec:
+    mtls:
+        mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+    name: api-gateway
+    namespace: garage-workflow
+spec:
+    selector:
+        matchLabels:
+            app: api-gateway
+            version: v1
+    mtls:
+        mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+    name: client-microservice
+    namespace: garage-workflow
+spec:
+    selector:
+        matchLabels:
+            app: client-microservice
+            version: v1
+    mtls:
+        mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+    name: vehicle-microservice
+    namespace: garage-workflow
+spec:
+    selector:
+        matchLabels:
+            app: vehicle-microservice
+            version: v1
+    mtls:
+        mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+    name: planification-microservice
+    namespace: garage-workflow
+spec:
+    selector:
+        matchLabels:
+            app: planification-microservice
+            version: v1
+    mtls:
+        mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+    name: notification-microservice
+    namespace: garage-workflow
+spec:
+    selector:
+        matchLabels:
+            app: notification-microservice
+            version: v1
+    mtls:
+        mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+    name: invoice-microservice
+    namespace: garage-workflow
+spec:
+    selector:
+        matchLabels:
+            app: invoice-microservice
+            version: v1
+    mtls:
+        mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+    name: frontend
+    namespace: garage-workflow
+spec:
+    selector:
+        matchLabels:
+            app: frontend
+            version: v1
+    mtls:
+        mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+    name: rabbitmq
+    namespace: garage-workflow
+spec:
+    selector:
+        matchLabels:
+            app: rabbitmq
+            version: v1
+    mtls:
+        mode: STRICT

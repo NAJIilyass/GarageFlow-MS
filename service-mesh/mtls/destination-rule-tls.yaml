@@ -1,0 +1,204 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+    name: api-gateway
+    namespace: garage-workflow
+spec:
+    hosts:
+        - api-gateway
+    http:
+        - route:
+              - destination:
+                    host: api-gateway
+                    subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: api-gateway
+    namespace: garage-workflow
+spec:
+    host: api-gateway
+    trafficPolicy:
+        tls:
+            mode: ISTIO_MUTUAL
+    subsets:
+        - name: v1
+          labels:
+              version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+    name: client-microservice
+    namespace: garage-workflow
+spec:
+    hosts:
+        - client-microservice
+    http:
+        - route:
+              - destination:
+                    host: client-microservice
+                    subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: client-microservice
+    namespace: garage-workflow
+spec:
+    host: client-microservice
+    trafficPolicy:
+        tls:
+            mode: ISTIO_MUTUAL
+    subsets:
+        - name: v1
+          labels:
+              version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+    name: vehicle-microservice
+    namespace: garage-workflow
+spec:
+    hosts:
+        - vehicle-microservice
+    http:
+        - route:
+              - destination:
+                    host: vehicle-microservice
+                    subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: vehicle-microservice
+    namespace: garage-workflow
+spec:
+    host: vehicle-microservice
+    trafficPolicy:
+        tls:
+            mode: ISTIO_MUTUAL
+    subsets:
+        - name: v1
+          labels:
+              version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+    name: planification-microservice
+    namespace: garage-workflow
+spec:
+    hosts:
+        - planification-microservice
+    http:
+        - route:
+              - destination:
+                    host: planification-microservice
+                    subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: planification-microservice
+    namespace: garage-workflow
+spec:
+    host: planification-microservice
+    trafficPolicy:
+        tls:
+            mode: ISTIO_MUTUAL
+    subsets:
+        - name: v1
+          labels:
+              version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+    name: notification-microservice
+    namespace: garage-workflow
+spec:
+    hosts:
+        - notification-microservice
+    http:
+        - route:
+              - destination:
+                    host: notification-microservice
+                    subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: notification-microservice
+    namespace: garage-workflow
+spec:
+    host: notification-microservice
+    trafficPolicy:
+        tls:
+            mode: ISTIO_MUTUAL
+    subsets:
+        - name: v1
+          labels:
+              version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+    name: invoice-microservice
+    namespace: garage-workflow
+spec:
+    hosts:
+        - invoice-microservice
+    http:
+        - route:
+              - destination:
+                    host: invoice-microservice
+                    subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: invoice-microservice
+    namespace: garage-workflow
+spec:
+    host: invoice-microservice
+    trafficPolicy:
+        tls:
+            mode: ISTIO_MUTUAL
+    subsets:
+        - name: v1
+          labels:
+              version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+    name: frontend
+    namespace: garage-workflow
+spec:
+    hosts:
+        - "*"
+    gateways:
+        - garage-workflow-gateway
+    http:
+        - route:
+              - destination:
+                    host: frontend
+                    subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+    name: frontend
+    namespace: garage-workflow
+spec:
+    host: frontend
+    trafficPolicy:
+        tls:
+            mode: ISTIO_MUTUAL
+    subsets:
+        - name: v1
+          labels:
+              version: v1
